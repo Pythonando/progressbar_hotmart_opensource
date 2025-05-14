@@ -12,6 +12,7 @@ def progressbar(request, offer_code):
     return JsonResponse({'progress': int(percentual)})
 
 
+
 @csrf_exempt
 def webhook_hotmart(request):
     
