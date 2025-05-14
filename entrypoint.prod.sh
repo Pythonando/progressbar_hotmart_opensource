@@ -20,4 +20,4 @@ else
     echo "Superusuário criado com sucesso!"
 fi
 
-python manage.py runserver 0.0.0.0:8081
+gunicorn core
