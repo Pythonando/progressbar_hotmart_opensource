@@ -11,18 +11,19 @@ def progressbar(request, offer_code):
     percentual = (batch.tickets_sales * 100) / batch.total_tickets
     return JsonResponse({'progress': int(percentual)})
 
+
 @csrf_exempt
 def webhook_hotmart(request):
     
-    '''token = request.headers.get('X-Hotmart-Hottok')
+    token = request.headers.get('X-Hotmart-Hottok')
     if token != settings.HOTTOK:
         print('token inválido')
-        return HttpResponse('Token inválido')'''
-    
+        return HttpResponse('Token inválido')
+    print(1)
     payload = json.loads(request.body)
 
     product_id = payload['data']['product']['id']
-
+    print(2)
     if payload['data']['purchase']['status'] in {'APPROVED', 'COMPLETED'}:
         if int(product_id) == int(settings.PRODUCT_ID):
 
