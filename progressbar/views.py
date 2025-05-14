@@ -13,8 +13,9 @@ def progressbar(request, offer_code):
 
 @csrf_exempt
 def webhook_hotmart(request):
-
+    print(1)
     token = request.headers.get('X-Hotmart-Hottok')
+    print(token)
     if token != settings.HOTTOK:
         return HttpResponseForbidden('Token inválido')
     
