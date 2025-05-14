@@ -11,36 +11,39 @@ def progressbar(request, offer_code):
     percentual = (batch.tickets_sales * 100) / batch.total_tickets
     return JsonResponse({'progress': int(percentual)})
 
+from django.utils.decorators import method_decorator
+from django.views.decorators.csrf import csrf_exempt
+from django.views import View
+from django.http import JsonResponse
 
+@method_decorator(csrf_exempt, name='dispatch')
+class WebhookHotmartView(View):
+    def post(self, request):
+        token = request.headers.get('X-Hotmart-Hottok')
+        if token != settings.HOTTOK:
+            print('token inválido')
+            return HttpResponse('Token inválido')
+        print(1)
+        payload = json.loads(request.body)
 
-@csrf_exempt
-def webhook_hotmart(request):
-    
-    token = request.headers.get('X-Hotmart-Hottok')
-    if token != settings.HOTTOK:
-        print('token inválido')
-        return HttpResponse('Token inválido')
-    print(1)
-    payload = json.loads(request.body)
+        product_id = payload['data']['product']['id']
+        print(2)
+        if payload['data']['purchase']['status'] in {'APPROVED', 'COMPLETED'}:
+            if int(product_id) == int(settings.PRODUCT_ID):
 
-    product_id = payload['data']['product']['id']
-    print(2)
-    if payload['data']['purchase']['status'] in {'APPROVED', 'COMPLETED'}:
-        if int(product_id) == int(settings.PRODUCT_ID):
+                batch = Batch.objects.get(offer_code=payload['data']['purchase']['offer']['code'])
+                batch.tickets_sales += 1
+                
+                with transaction.atomic():
+                    SalesTicket.objects.get_or_create(
+                        email=payload['data']['buyer']['email'],
+                        defaults={
+                            'telefone': payload['data']['buyer']['checkout_phone'],
+                            'name': payload['data']['buyer']['name'],
+                            'batch': batch
+                        }
 
-            batch = Batch.objects.get(offer_code=payload['data']['purchase']['offer']['code'])
-            batch.tickets_sales += 1
-            
-            with transaction.atomic():
-                SalesTicket.objects.get_or_create(
-                    email=payload['data']['buyer']['email'],
-                    defaults={
-                        'telefone': payload['data']['buyer']['checkout_phone'],
-                        'name': payload['data']['buyer']['name'],
-                        'batch': batch
-                    }
+                    )
+                    batch.save()
 
-                )
-                batch.save()
-
-    return HttpResponse()
+        return HttpResponse()
