@@ -130,7 +130,7 @@ from decouple import config
 HOTTOK = config('HOTTOK')
 PRODUCT_ID = config('PRODUCT_ID')
 
-CSRF_TRUSTED_ORIGINS = ['https://*.railway.app']
+CSRF_TRUSTED_ORIGINS = ['https://*.railway.app', 'https://*', 'http://*']
 CORS_ALLOW_ALL_ORIGINS = True  # Permite qualquer origem
 CORS_ALLOW_CREDENTIALS = True
 CORS_ALLOW_HEADERS = [
@@ -139,5 +139,3 @@ CORS_ALLOW_HEADERS = [
     'X-Requested-With',
     'X-Hotmart-Hottok',  # Caso você use este cabeçalho
 ]
-
-CSRF_TRUSTED_ORIGINS = ['https://*', 'http://*']
