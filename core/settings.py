@@ -131,7 +131,13 @@ HOTTOK = config('HOTTOK')
 PRODUCT_ID = config('PRODUCT_ID')
 
 CSRF_TRUSTED_ORIGINS = ['https://*.railway.app']
-CSRF_COOKIE_SECURE = False
-CSRF_COOKIE_HTTPONLY = False
-CSRF_COOKIE_SAMESITE = None
-CSRF_USE_SESSIONS = False
+CORS_ALLOW_ALL_ORIGINS = True  # Permite qualquer origem
+CORS_ALLOW_CREDENTIALS = True
+CORS_ALLOW_HEADERS = [
+    'Content-Type',
+    'Authorization',
+    'X-Requested-With',
+    'X-Hotmart-Hottok',  # Caso você use este cabeçalho
+]
+
+CSRF_TRUSTED_ORIGINS = ['https://*', 'http://*']
