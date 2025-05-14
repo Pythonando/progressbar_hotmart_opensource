@@ -20,4 +20,4 @@ else
     echo "Superusuário criado com sucesso!"
 fi
 
-gunicorn core
+gunicorn core.wsgi
