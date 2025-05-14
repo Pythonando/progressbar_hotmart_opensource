@@ -17,7 +17,8 @@ def webhook_hotmart(request):
     token = request.headers.get('X-Hotmart-Hottok')
     print(token)
     if token != settings.HOTTOK:
-        return HttpResponseForbidden('Token inválido')
+        print('token inválido')
+        return HttpResponse('Token inválido')
     
     payload = json.loads(request.body)
 
