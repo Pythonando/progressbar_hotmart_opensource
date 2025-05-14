@@ -128,4 +128,4 @@ from decouple import config
 HOTTOK = config('HOTTOK')
 PRODUCT_ID = config('PRODUCT_ID')
 
-CSRF_TRUSTED_ORIGINS = ['https://*.railway.app', 'https://*.pythonando.com.br']
+#CSRF_TRUSTED_ORIGINS = ['https://*.railway.app']
